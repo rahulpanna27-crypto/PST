@@ -1,0 +1,42 @@
+class Solution {
+    public List<Integer> findAnagrams(String s, String p) {
+        List<Integer> result = new ArrayList<>();
+
+        int n = s.length();
+        int m = p.length();
+
+        if (n < m) return result;
+
+        int[] pCount = new int[26];
+        int[] windowCount = new int[26];
+
+        // Build frequency array for p
+        for (int i = 0; i < m; i++) {
+            pCount[p.charAt(i) - 'a']++;
+        }
+
+        // Build frequency array for the first window
+        for (int i = 0; i < m; i++) {
+            windowCount[s.charAt(i) - 'a']++;
+        }
+
+        // Check the first window
+        if (Arrays.equals(pCount, windowCount)) {
+            result.add(0);
+        }
+
+        // Slide the window
+        for (int i = m; i < n; i++) {
+            // Add new character entering the window
+            windowCount[s.charAt(i) - 'a']++;
+            // Remove old character leaving the window
+            windowCount[s.charAt(i - m) - 'a']--;
+
+            if (Arrays.equals(pCount, windowCount)) {
+                result.add(i - m + 1);
+            }
+        }
+
+        return result;
+    }
+}
